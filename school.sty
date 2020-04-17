@@ -1,0 +1,335 @@
+\ProvidesPackage{school}
+
+\date{Dezember 2019}
+\newcommand\lecture{Mathe, Klasse 8}
+\title{Leistungskontrolle}
+\newcommand\name{Herr Paufler}
+\newcommand\school{Angergymnasium}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%						Packages
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[pdftex]{graphicx} % Allows inclusion of image files
+\usepackage{amssymb} % Access to extra math symbols
+\usepackage{amsmath} % Access to extra math symbols
+\usepackage{wrapfig} % Allows wrapping of text around figures
+\usepackage{calc} % Gives access to a basic calculator
+\usepackage{tabularx} % Makes nice tables
+\usepackage{geometry}\geometry{a4paper, left=20mm,right=20mm,bottom=25mm,top=10mm} % defines margins and geometry
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{automata,positioning}
+\usepackage{pgfplots}
+\usetikzlibrary{arrows, decorations.markings} %enables nice arrows at axis
+\usepgfplotslibrary{fillbetween} %fill area between curves
+
+
+\newcounter{subtask} % Counter for subtasks, will be reset in every new task
+\setcounter{subtask}{1} % Start the counter at the value 1
+\newcommand\asubtask{
+\alph{subtask}) \stepcounter{subtask}
+} % Generates letter for subtasks
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%						Task and solution
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% set-up of the option, to define whether solutions should be shown
+\SetupKeyvalOptions{
+family = isshowingsolutions,
+prefix = isshowingsolutions@
+}
+
+\DeclareBoolOption[false]{solution}
+\ProcessKeyvalOptions*\relax
+
+% define a task environment, which automatically counts
+\newcounter{task}[section]
+     
+\newenvironment{task}[2][0]{\refstepcounter{task}\par\medskip \setcounter{subtask}{1}
+    \noindent 
+    		\textbf{Aufgabe~\thetask:} \, #2 \ifthenelse{#1=0}{}{\ifthenelse{#1=1}{ (1 Punkt) }{ (#1 Punkte) }} 
+     \rmfamily \vspace{1mm} \\}
+    {\medskip}
+    
+% define the solution environment. if solution=false, its completely hidden
+\NewEnviron{solution}
+  {\ifisshowingsolutions@solution \par \medskip \setcounter{subtask}{1} \noindent \textcolor{gray}{ \textbf{Lösung:} } \\ \BODY \else\fi \medskip}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%						custom Column types
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}} %flush left fixed width:
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}} %center fixed width:
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}} %flush right fixed width:
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%						copied from stephan
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{cancel}
+\usepackage{caption}
+% \usepackage{assignHeader}
+\usepackage{mathtools}
+%\usepackage{siunitx}
+\usepackage{nicefrac}
+%\usepackage{mathCommands}
+\usepackage{booktabs}
+
+
+
+%
+%----------------Multiple Problems on one line-------------------------------------------%%
+%
+\newlength{\gap}
+\setlength{\gap}{2mm}
+
+\newcommand{\twotasks}[2]{
+	\begin{minipage}[t]{0.45\textwidth} #1 \vspace{\gap}\end{minipage} \hfill
+	\begin{minipage}[t]{0.45\textwidth} #2 \vspace{\gap}\end{minipage} 
+} % Fits two problems on a line
+
+\newcommand{\threetasks}[3]{
+	\begin{minipage}[t]{0.31\textwidth} #1 \vspace{\gap}\end{minipage}
+	\begin{minipage}[t]{0.31\textwidth} #2 \vspace{\gap}\end{minipage}
+	\begin{minipage}[t]{0.31\textwidth} #3 \vspace{\gap}\end{minipage}
+} % Fits three problems on a line
+
+\newcommand{\twosubtasks}[2]{
+	\begin{minipage}[t]{0.5\textwidth} \begin{itemize}\item[\asubtask] #1 \end{itemize} \vspace{\gap} \end{minipage} 
+	\begin{minipage}[t]{0.5\textwidth} \begin{itemize}\item[\asubtask] #2 \end{itemize} \vspace{\gap} \end{minipage} 
+} % Fits two problems on a line
+
+\newcommand{\threesubtasks}[3]{
+	\begin{minipage}[t]{0.31\textwidth} \begin{itemize}\item[\asubtask] #1 \end{itemize} \vspace{\gap} \end{minipage}
+	\begin{minipage}[t]{0.31\textwidth} \begin{itemize}\item[\asubtask] #2 \end{itemize} \vspace{\gap} \end{minipage} 
+	\begin{minipage}[t]{0.31\textwidth} \begin{itemize}\item[\asubtask] #3 \end{itemize} \vspace{\gap} \end{minipage}
+} % Fits three problems on a line
+
+
+%----------------Multiple Choice-------------------------------------------%%
+\newcounter{choice} % Counter for multiple choice problems 
+\setcounter{choice}{1} % Start the counter at the value 1
+\newcommand\achoice{
+(\alph{choice}) \stepcounter{choice}
+} % Generates letter for multiple choice option
+
+\newcommand{\mcFive}[5]{\vspace*{-7mm} 
+  \begin{tabular}{l@{\hspace{1mm}}p{0.9\textwidth}}
+    \achoice & #1 \\ \achoice & #2 \\ \achoice & #3 \\ 
+    \achoice & #4 \\ \achoice & #5 \end{tabular}
+  \setcounter{choice}{1}
+} % Makes multiple-choice options 
+
+\newcommand{\mcFour}[4]{\vspace*{-7mm} 
+  \begin{tabular}{l@{\hspace{1mm}}p{0.9\textwidth}}
+    \achoice & #1 \\ \achoice & #2 \\ \achoice & #3 \\ 
+    \achoice & #4  \end{tabular}
+  \setcounter{choice}{1}
+} % Makes multiple-choice options
+ 
+\newcommand{\mcThree}[3]{\vspace*{-7mm} 
+  \begin{tabular}{l@{\hspace{1mm}}p{0.9\textwidth}}
+    \achoice & #1 \\ \achoice & #2 \\ \achoice & #3   \end{tabular}
+  \setcounter{choice}{1}
+} % Makes multiple-choice options 
+
+\newcommand{\mcTwo}[2]{\vspace*{-7mm} 
+  \begin{tabular}{l@{\hspace{1mm}}p{0.9\textwidth}}
+    \achoice & #1 \\ \achoice & #2  \end{tabular}
+  \setcounter{choice}{1}
+} % Makes multiple-choice options
+%--------------------------------- 
+
+
+%
+%----------------COMMANDS-------------------------------------------%%
+%
+\newcommand\divi[2]{
+$\begin{array}[t]{r} 
+#1  :  #2 \\ \hline 
+ \end{array}$}
+
+\newcommand\mul[2]{
+$\begin{array}[t]{r} 
+#1 \cdot  #2 \\ \hline 
+ \end{array}$}
+ 
+\newcommand\add[2]{
+  $\begin{array}[t]{rr} 
+   &  #1 \\ 
+    + & #2 \\ \hline 
+  \end{array}$}
+
+\newcommand\sub[2]{
+  $\begin{array}[t]{rr}
+    & #1 \\ 
+    - & #2 \\ \hline
+  \end{array}$}
+  
+%Scalar product
+\def\spr#1#2{ $  \vec{#1} \cdot \vec{#2}  $ }
+\def\sprm#1#2{   \vec{#1} \cdot \vec{#2}   }
+
+%Vector product
+\def\cpr#1#2{ $  \vec{#1} \times \vec{#2}  $ }
+\def\cprm#1#2{   \vec{#1} \times \vec{#2}   }
+
+%exp Function
+\renewcommand{\exp}[1]{\mathrm{e}^{#1}}
+\newcommand{\dx}{\mathrm{d}x}
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+\newcommand\blank{\underline{\hspace{2cm}}} % Gives a blank 
+
+
+%
+%----------------Tikz environments-------------------------------------------%%
+%
+\newenvironment{tikzsubtask}%
+{%
+    \sffamily\asubtask\par\centering
+    \begin{tikzpicture}[baseline=(current bounding box.north), font=\sffamily, thick]
+}{%
+    \end{tikzpicture}
+}
+
+\newenvironment{tikztask}%
+{%
+    \sffamily\par\centering
+    \begin{tikzpicture}[baseline=(current bounding box.north), font=\sffamily, thick]
+}{%
+    \end{tikzpicture}
+}
+
+
+\tikzset{
+	circ/.style = {draw, circle ,fill=gray!20, minimum size=#1,
+              inner sep=0pt, outer sep=0pt},
+	circ/.default = 8mm
+} %small gray shaded circle
+
+\tikzset{
+	rect/.style n args=2{draw, rectangle, fill=gray!20, minimum width=#1, minimum height=#2},
+	rect/.default = {16mm}{6mm}
+} %small gray shaded circle
+
+\tikzset{
+dot/.style = {circle, fill, minimum size=#1,
+              inner sep=0pt, outer sep=0pt},
+dot/.default = 6pt % size of the circle diameter 
+} % dot with given radius
+
+
+
+\newlength{\rwidth}
+\newlength{\rheight}
+\newenvironment{pyramid}[2]%
+{%
+    \sffamily\par\centering
+	\setlength{\rwidth}{#1}
+	\setlength{\rheight}{#2}
+    \begin{tikzpicture}[baseline=(current bounding box.north), font=\sffamily, thick]
+}{%
+    \end{tikzpicture}
+}
+
+\newcommand\pyramidthree[8]{
+\begin{tikztask}
+\node[rect={#1}{#2}] at +(0,0) {#3};
+%
+\node[rect={#1}{#2}] at +(-#1/2,-#2) {#4};
+\node[rect={#1}{#2}] at +(#1/2,-#2) {#5};
+%
+\node[rect={#1}{#2}] at +(-#1,-#2*2) {#6};
+\node[rect={#1}{#2}] at +(0,-#2*2) {#7};
+\node[rect={#1}{#2}] at +(#1,-#2*2) {#8};
+\end{tikztask}
+}% creates a pyramid with 3 rows
+
+\def\pyOne#1#2{ 
+	\node[rect={\rwidth}{\rheight}] at (0,-#1*\rheight) {#2}; 
+}
+\def\pyTwo#1#2#3{ 
+	\node[rect={\rwidth}{\rheight}] at (-\rwidth/2,-#1*\rheight) {#2};
+	\node[rect={\rwidth}{\rheight}] at (\rwidth/2,-#1*\rheight) {#3};
+}
+\def\pyThree#1#2#3#4{ 
+	\node[rect={\rwidth}{\rheight}] at (-\rwidth,-#1*\rheight) {#2};
+	\node[rect={\rwidth}{\rheight}] at (0,-#1*\rheight) {#3};
+	\node[rect={\rwidth}{\rheight}] at (\rwidth,-#1*\rheight) {#4};
+}
+\def\pyFour#1#2#3#4#5{ 
+	\node[rect={\rwidth}{\rheight}] at +(-\rwidth*1.5, -#1*\rheight) {#2};
+	\node[rect={\rwidth}{\rheight}] at +(-\rwidth*0.5, -#1*\rheight) {#3};
+	\node[rect={\rwidth}{\rheight}] at +( \rwidth*0.5, -#1*\rheight) {#4};
+	\node[rect={\rwidth}{\rheight}] at +( \rwidth*1.5, -#1*\rheight) {#5};
+}
+\def\pyFive#1#2#3#4#5#6{ 
+	\node[rect={\rwidth}{\rheight}] at +(-\rwidth*2, -#1*\rheight) {#2};
+	\node[rect={\rwidth}{\rheight}] at +(-\rwidth*1, -#1*\rheight) {#3};
+	\node[rect={\rwidth}{\rheight}] at +( \rwidth*0, -#1*\rheight) {#4};
+	\node[rect={\rwidth}{\rheight}] at +( \rwidth*1, -#1*\rheight) {#5};
+	\node[rect={\rwidth}{\rheight}] at +( \rwidth*2, -#1*\rheight) {#6};
+}
+
+
+\tikzset{
+  pics/my circle/.style 2 args={
+    code={
+      \draw circle (#1);
+      \draw [fill] (0,0) circle (1pt) -- (#1,0) node [midway, above] {#2};
+    }
+  },
+}
+
+
+%
+%----------------PGFplots-------------------------------------------%%
+%
+
+\newenvironment{plot}[4]%
+{%
+\begin{tikztask}
+    \begin{axis}[
+  axis lines=middle, % draws axis through coordinate origin
+  axis line style={my axis},
+  xlabel={$x$},
+  ylabel={$y$},
+  xlabel style={below right},
+  ylabel style={above left},
+  xmin=#1,
+  xmax=#2,
+  ymin=#3,
+  ymax=#4
+  ]
+}{%
+    \end{axis}
+    \end{tikztask}
+}% custom plot environment, takes four input variables, xmin, xmax, ymin, ymax
+
+
+\tikzset{
+    nomorepostaction/.code=\makeatletter\let\tikz@postactions\pgfutil@empty, % From https://tex.stackexchange.com/questions/3184/applying-a-postaction-to-every-path-in-tikz/5354#5354
+    my axis/.style={
+        postaction={
+            decoration={
+                markings,
+                mark=at position 1 with {
+                    \arrow[ultra thick]{latex}
+                }
+            },
+            decorate,
+            nomorepostaction
+        },
+        thin,
+        -, % switch off other arrow tips
+        every path/.append style=my axis % this is necessary so it works both with "axis lines=left" and "axis lines=middle"
+    }
+}% makes nice axis
+
+

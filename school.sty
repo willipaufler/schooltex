@@ -1,5 +1,6 @@
 \ProvidesPackage{school}
 
+
 \date{Dezember 2019}
 \newcommand\lecture{Mathe, Klasse 8}
 \title{Leistungskontrolle}
@@ -17,11 +18,12 @@
 \usepackage{calc} % Gives access to a basic calculator
 \usepackage{tabularx} % Makes nice tables
 \usepackage{geometry}\geometry{a4paper, left=20mm,right=20mm,bottom=25mm,top=10mm} % defines margins and geometry
+
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric}
 \usetikzlibrary{automata,positioning}
 \usepackage{pgfplots}
-\usetikzlibrary{arrows, decorations.markings} %enables nice arrows at axis
+\usetikzlibrary{arrows, decorations.markings,positioning,matrix} %enables nice arrows at axis
 \usepgfplotslibrary{fillbetween} %fill area between curves
 
 
@@ -44,6 +46,7 @@ prefix = isshowingsolutions@
 
 \DeclareBoolOption[false]{solution}
 \ProcessKeyvalOptions*\relax
+
 
 % define a task environment, which automatically counts
 \newcounter{task}[section]
@@ -89,14 +92,14 @@ prefix = isshowingsolutions@
 \setlength{\gap}{2mm}
 
 \newcommand{\twotasks}[2]{
-	\begin{minipage}[t]{0.45\textwidth} #1 \vspace{\gap}\end{minipage} \hfill
-	\begin{minipage}[t]{0.45\textwidth} #2 \vspace{\gap}\end{minipage} 
+	\begin{minipage}[t]{0.5\textwidth} #1 \vspace{\gap}\end{minipage} \hfill
+	\begin{minipage}[t]{0.5\textwidth} #2 \vspace{\gap}\end{minipage} 
 } % Fits two problems on a line
 
 \newcommand{\threetasks}[3]{
-	\begin{minipage}[t]{0.31\textwidth} #1 \vspace{\gap}\end{minipage}
-	\begin{minipage}[t]{0.31\textwidth} #2 \vspace{\gap}\end{minipage}
-	\begin{minipage}[t]{0.31\textwidth} #3 \vspace{\gap}\end{minipage}
+	\begin{minipage}[t]{0.33\textwidth} #1 \vspace{\gap}\end{minipage}
+	\begin{minipage}[t]{0.33\textwidth} #2 \vspace{\gap}\end{minipage}
+	\begin{minipage}[t]{0.33\textwidth} #3 \vspace{\gap}\end{minipage}
 } % Fits three problems on a line
 
 \newcommand{\twosubtasks}[2]{
@@ -306,6 +309,27 @@ dot/.default = 6pt % size of the circle diameter
   xmax=#2,
   ymin=#3,
   ymax=#4
+  ]
+}{%
+    \end{axis}
+    \end{tikztask}
+}% custom plot environment, takes four input variables, xmin, xmax, ymin, ymax
+
+\newenvironment{scaledplot}[5]%
+{%
+\begin{tikztask}
+    \begin{axis}[
+  axis lines=middle, % draws axis through coordinate origin
+  axis line style={my axis},
+  xlabel={$x$},
+  ylabel={$y$},
+  xlabel style={below right},
+  ylabel style={above left},
+  xmin=#1,
+  xmax=#2,
+  ymin=#3,
+  ymax=#4,
+  scale=#5
   ]
 }{%
     \end{axis}

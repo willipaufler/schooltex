@@ -1,7 +1,7 @@
-% Author:     S. Fritzsche (s.fritzsche@gsi.de)
-% Last Edit:  R. Beerwerth (hij@beerwerth.eu)
+%Willi Paufler
 % 
 \ProvidesClass{exam}[2019/12/17 v0.1 exam]
+
 \LoadClassWithOptions{scrartcl}
 
 \RequirePackage{kvoptions}
